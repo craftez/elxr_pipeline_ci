@@ -11,13 +11,14 @@ jobs:
         otp: ['25']
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-elixir@v1
+      - uses: erlef/setup-beam@v1
         with:
           otp-version: ${{matrix.otp}}
           elixir-version: ${{matrix.elixir}}
       - uses: actions/cache@v3
         id: mix-sobelow-cache
         with:
+          path: deps
           key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-${{ hashFiles(format('{0}-{1}', github.workspace, '/mix.lock')) }}
       - name: Install Mix Dependencies
         if: steps.mix-sobelow-cache.outputs.cache-hit != 'true'
